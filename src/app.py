@@ -17,4 +17,4 @@ class App:
                 print(
                     f'{datestart} - {bcolors.BLUE}IMPORTING ENV{bcolors.ENDC}: {env[0].replace("_", "-")}')
                 teste = subprocess.run(
-                    'az keyvault secret set --vault-name ' + vaultName + ' --name "' + env[0].replace('_', '-') + '" --value "' + env[1].replace('"', '') + '" ', shell=True, check=True, stdout=subprocess.DEVNULL)
+                    'az keyvault secret set --vault-name ' + vaultName + ' --name "' + env[0].replace('_', '-').rstrip('\n') + '" --value "' + env[1].replace('"', '').rstrip('\n') + '" ', shell=True, check=True, stdout=subprocess.DEVNULL)
