@@ -49,6 +49,12 @@ CLIENT_SECRET=sua-client-secret
 TENANT_ID=seu-tenant-id
 ```
 
+- O arquivo poderá conter variáveis que já exixtem no cofre só que com outro nome, assim importando para o nome que é necessário para o projeto. Por exemplo:
+
+```env
+VARIAVEL-EXISTENTE-NO-COFRE~>NOVA-VARIAVEL
+```
+
 4. Instalação da CLI da azure:
 
 - Para instalação da CLI, pode ser acessado através deste [link](https://learn.microsoft.com/pt-br/cli/azure/install-azure-cli)
