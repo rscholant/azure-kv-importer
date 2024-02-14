@@ -1,4 +1,5 @@
 import subprocess
+import json
 from src.shared.utils.dates import UtilDates
 from src.shared.utils.colors import bcolors
 
@@ -13,8 +14,17 @@ class App:
             if (line[0] != '#'):
                 dates = UtilDates()
                 datestart = dates.time_now()
-                env = line.split('=', 1)
-                print(
-                    f'{datestart} - {bcolors.BLUE}IMPORTING ENV{bcolors.ENDC}: {env[0].replace("_", "-")}')
-                teste = subprocess.run(
-                    'az keyvault secret set --vault-name ' + vaultName + ' --name "' + env[0].replace('_', '-').rstrip('\n') + '" --value "' + env[1].replace('"', '').rstrip('\n') + '" ', shell=True, check=True, stdout=subprocess.DEVNULL)
+                if ('~>' not in line):
+                    env = line.split('=', 1)
+                    print(
+                        f'{datestart} - {bcolors.BLUE}IMPORTING ENV{bcolors.ENDC}: {env[0].replace("_", "-")}')
+                    teste = subprocess.run(
+                        'az keyvault secret set --vault-name ' + vaultName + ' --name "' + env[0].replace('_', '-').rstrip('\n') + '" --value "' + env[1].replace('"', '').rstrip('\n') + '" ', shell=True, check=True, stdout=subprocess.DEVNULL)
+                else:
+                    env = line.split('~>', 1)
+                    print(
+                        f'{datestart} - {bcolors.BLUE}IMPORTING ENV{bcolors.ENDC}: {env[0].replace("_", "-")} to {env[1].replace("_", "-")}')
+                    result = subprocess.run('az keyvault secret show --vault-name ' +
+                                            vaultName + ' --name "' + env[0].replace('_', '-').rstrip('\n') + '"', shell=True, check=True, stdout=subprocess.PIPE)
+                    subprocess.run(
+                        'az keyvault secret set --vault-name ' + vaultName + ' --name "' + env[1].replace('_', '-').rstrip('\n') + '" --value "' + json.loads(result.stdout)['value'] + '" ', shell=True, check=True, stdout=subprocess.DEVNULL)
